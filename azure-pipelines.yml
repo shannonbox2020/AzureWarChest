@@ -6,10 +6,11 @@
 trigger:
 - master
 
+
 pool:
   vmImage: ubuntu-latest
 
-steps:
+steps
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
@@ -20,3 +21,14 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
+settings
+ - task: CopyFiles@2
+   inputs:
+     Contents: '**/.war'
+     TargetFolder: '$(build.artifactstagingdirectory)'
+settings
+     - task: PublishBuildArtifacts@1
+       inputs:
+         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+         ArtifactName: 'warfile'
+         publishLocation: 'Container'
